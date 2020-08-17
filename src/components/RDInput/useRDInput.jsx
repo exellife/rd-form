@@ -6,6 +6,7 @@ export function useRDInput() {
     const [_value, _setValue] = useState('');
     const [_state, dispatch] = useReducer(reducer, state)
 
+
     let timeout;
     useEffect(() => {
         timeout = setTimeout(() => {
@@ -48,6 +49,7 @@ export function useRDInput() {
             type: types.set,
             payload: { ...conf, valid, required, showInput }
         });
+
     }
 
     function penclick(e) {
@@ -66,23 +68,28 @@ export function useRDInput() {
     }
 
     function _validate() {
+        
         const { validator } = _state;
         if (validator) {
+            
             _spinner(true);
-            validator(_value)
-                .then(payload => {
-                    dispatch({
-                        type: types.validationResult,
-                        payload,
-                    })
-                    _spinner(false);
-                });
+            
+            dispatch({
+                type: types.validationResult,
+                payload: validator(_value),
+            })
+                    
+            _spinner(false);
         }
     }
 
     function _getState() {
-        const { valid, value } = _state;
-        return { valid, value };
+        _validate();
+
+        return { 
+            value: _value,
+            valid: _state.valid, 
+        }
     }
 
     return {
@@ -90,7 +97,7 @@ export function useRDInput() {
         getState: () => _getState(),
         clear: () => {
             _setValue(''),
-            dispatch({ type: types.resetClasses });
+                dispatch({ type: types.resetClasses });
         },
         props: {
             ..._state,

@@ -13,20 +13,20 @@ import {
 } from 'ReactDynamicForm';
 
 
-function validateSomething(str) {
-    return new Promise((res, rej) => {
-        setTimeout(() => {
-            res([true, 'some message from backend'])
-        }, 1000)
-        // res([false, 'some message from backend'])
-    })
-}
-
-// async function validateSomething(str) {
-
-//     return [false, 'some message from backend']
-
+// function validateSomething(str) {
+//     return new Promise((res, rej) => {
+//         setTimeout(() => {
+//             res([true, 'some message from backend'])
+//         }, 1000)
+//         // res([false, 'some message from backend'])
+//     })
 // }
+
+function validateSomething(str) {
+
+    return [false, 'some message from backend']
+
+}
 
 function validatePswd(str) {
     if (str.length > 10) {

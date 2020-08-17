@@ -464,25 +464,21 @@
       if (validator) {
         _spinner(true);
 
-        validator(_value).then(payload => {
-          dispatch({
-            type: types.validationResult,
-            payload
-          });
-
-          _spinner(false);
+        dispatch({
+          type: types.validationResult,
+          payload: validator(_value)
         });
+
+        _spinner(false);
       }
     }
 
     function _getState() {
-      var {
-        valid,
-        value
-      } = _state;
+      _validate();
+
       return {
-        valid,
-        value
+        value: _value,
+        valid: _state.valid
       };
     }
 
