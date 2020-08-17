@@ -476,12 +476,25 @@ function useRDInput() {
     }
   }
 
-  function _getState() {}
+  function _getState() {
+    var {
+      valid,
+      value
+    } = _state;
+    return {
+      valid,
+      value
+    };
+  }
 
   return {
     set,
     getState: () => _getState(),
-    clear: () => _setValue(''),
+    clear: () => {
+      _setValue(''), dispatch({
+        type: types.resetClasses
+      });
+    },
     props: _objectSpread2(_objectSpread2({}, _state), {}, {
       value: _value,
       penclick,
