@@ -1,6 +1,6 @@
 {
-  "name": "react_input",
-  "version": "1.0.0",
+  "name": "@exel/rd-form",
+  "version": "1.0.0-beta-a",
   "description": "",
   "main": "index.js",
   "scripts": {

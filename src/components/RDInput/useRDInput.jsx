@@ -81,13 +81,17 @@ export function useRDInput() {
     }
 
     function _getState() {
-
+        const { valid, value } = _state;
+        return { valid, value };
     }
 
     return {
         set,
         getState: () => _getState(),
-        clear: () => _setValue(''),
+        clear: () => {
+            _setValue(''),
+            dispatch({ type: types.resetClasses });
+        },
         props: {
             ..._state,
             value: _value,

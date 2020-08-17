@@ -108,13 +108,13 @@ function App() {
         // EmailInput.validate();
         // PswdInput.validate();
         const m = EmailInput.getState();
-        const p = PswdInput.getState();
+        // const p = PswdInput.getState();
         const n = NameInput.getState();
-        const t = SomeInput.getState();
+        // const t = SomeInput.getState();
         console.log(m);
-        console.log(p);
+        // console.log(p);
         console.log(n)
-        console.log(t);
+        // console.log(t);
     }
 
     const styles = {
@@ -130,8 +130,8 @@ function App() {
                 <RDInput {...NameInput.props} />
                 {/* <RDInput {...PswdInput.props} />
                 
-                <RDTextArea {...SomeInput.props} />
-                <button onClick={e => submit(e)}>submit</button> */}
+                <RDTextArea {...SomeInput.props} /> */}
+                <button onClick={e => submit(e)}>submit</button>
             </RDForm>
         </>
 
