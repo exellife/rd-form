@@ -329,7 +329,8 @@
     spinner: 'spinner',
     validationResult: 'validationResult',
     resetClasses: 'resetClasses',
-    validate: 'validate'
+    validate: 'validate',
+    reset: 'reset'
   };
   var state = {
     type: '',
@@ -358,6 +359,12 @@
           _classes: _classes
         });
 
+      case types.reset:
+        return _objectSpread2(_objectSpread2({}, state), {}, {
+          _classes: _classes,
+          err: ''
+        });
+
       case types.showInput:
         var close = !action.payload;
 
@@ -382,10 +389,14 @@
 
       case types.validate:
         if (state.validator) {
-          var [_valid, err] = state.validator(action.payload);
+          var {
+            value,
+            close: _close
+          } = action.payload;
+          var [_valid, err] = state.validator(value);
           var classToAdd = _valid ? 'rd-valid' : 'rd-error';
 
-          var _showInput = !_valid;
+          var _showInput = _close ? !_valid : state.showInput;
 
           var _toSet = _objectSpread2(_objectSpread2({}, state), {}, {
             _classes: _objectSpread2(_objectSpread2({}, state._classes), {}, {
@@ -412,8 +423,8 @@
     var timeout;
     React.useEffect(() => {
       timeout = setTimeout(() => {
-        _validate();
-      }, 2000);
+        _validate(false);
+      }, 700);
       return () => {
         clearTimeout(timeout);
       };
@@ -431,7 +442,7 @@
             payload: false
           });
         }
-      }, 2000);
+      }, 4000);
       return () => {
         clearTimeout(timeout2);
       };
@@ -453,8 +464,13 @@
           showInput
         })
       });
-
-      _validate();
+      dispatch({
+        type: types.validate,
+        payload: {
+          value: conf.value,
+          close: true
+        }
+      });
     }
 
     function penclick(e) {
@@ -473,11 +489,16 @@
     }
 
     function _validate() {
+      var close = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+
       _spinner(true);
 
       dispatch({
         type: types.validate,
-        payload: _value
+        payload: {
+          value: _value,
+          close
+        }
       });
 
       _spinner(false);
@@ -496,8 +517,10 @@
       set,
       getState: () => _getState(),
       clear: () => {
-        _setValue(''), dispatch({
-          type: types.resetClasses
+        _setValue('');
+
+        dispatch({
+          type: types.reset
         });
       },
       props: _objectSpread2(_objectSpread2({}, _state), {}, {
@@ -507,7 +530,7 @@
           _setValue(e.target.value);
 
           dispatch({
-            type: types.resetClasses
+            type: types.reset
           });
         },
         onBlur: () => _validate()

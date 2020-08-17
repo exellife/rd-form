@@ -13,7 +13,6 @@ export function RDInput(props) {
         question,
         validator, ...rest } = props;
 
-    // console.log(showInput)
     const _input = (
         <div style={{ ...styles.rdWrap }}
             className={_classes.rdWrap.join(" ")}

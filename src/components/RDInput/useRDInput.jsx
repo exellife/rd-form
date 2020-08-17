@@ -10,8 +10,8 @@ export function useRDInput() {
     let timeout;
     useEffect(() => {
         timeout = setTimeout(() => {
-            _validate();
-        }, 2000);
+            _validate(false);
+        }, 700);
 
         return () => {
             clearTimeout(timeout);
@@ -28,7 +28,7 @@ export function useRDInput() {
                     payload: false,
                 })
             }
-        }, 2000)
+        }, 4000)
 
         return () => {
             clearTimeout(timeout2)
@@ -53,7 +53,10 @@ export function useRDInput() {
             payload: { ...conf, valid, required, showInput }
         });
 
-        _validate();
+        dispatch({
+            type: types.validate,
+            payload: { value: conf.value, close: true },
+        })
     }
 
     function penclick(e) {
@@ -71,11 +74,11 @@ export function useRDInput() {
         })
     }
 
-    function _validate() {
+    function _validate(close = true) {
         _spinner(true);
         dispatch({
             type: types.validate,
-            payload: _value,
+            payload: { value: _value, close }
         })
         _spinner(false);
     }
@@ -93,8 +96,8 @@ export function useRDInput() {
         set,
         getState: () => _getState(),
         clear: () => {
-            _setValue(''),
-                dispatch({ type: types.resetClasses });
+            _setValue('');
+            dispatch({ type: types.reset });
         },
         props: {
             ..._state,
@@ -102,7 +105,7 @@ export function useRDInput() {
             penclick,
             onChange: (e) => {
                 _setValue(e.target.value);
-                dispatch({ type: types.resetClasses });
+                dispatch({ type: types.reset });
             },
             onBlur: () => _validate(),
         },

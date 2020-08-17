@@ -23,6 +23,7 @@ export const types = {
     validationResult: 'validationResult',
     resetClasses: 'resetClasses',
     validate: 'validate',
+    reset: 'reset',
 };
 
 
@@ -62,20 +63,14 @@ export function reducer(state, action) {
                 ...state,
                 _classes: _classes,
             }
-        // case types.validationResult:
-        //     const [valid, err] = action.payload;
-        //     const classToAdd = valid ?
-        //         'rd-valid' : 'rd-error';
-        //     const _toSet = {
-        //         ...state,
-        //         _classes: {
-        //             ...state._classes,
-        //             rdWrap: [..._classes.rdWrap, classToAdd]
-        //         },
-        //         valid,
-        //         err,
-        //     }
-        //     return _toSet;
+
+        case types.reset:
+            return {
+                ...state,
+                _classes: _classes,
+                err: '',
+            }
+
         case types.showInput:
             // showInput -> true = open input
             // showInput -> false = close input
@@ -106,13 +101,18 @@ export function reducer(state, action) {
 
         case types.validate:
             if (state.validator) {
+                const { value, close } =
+                    action.payload;
 
                 const [valid, err] =
-                    state.validator(action.payload);
+                    state.validator(value);
 
                 const classToAdd = valid ?
                     'rd-valid' : 'rd-error';
-                const showInput = !valid;
+
+                const showInput = close ?
+                    !valid : state.showInput;
+
                 const _toSet = {
                     ...state,
                     _classes: {
