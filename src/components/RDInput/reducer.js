@@ -22,6 +22,7 @@ export const types = {
     spinner: 'spinner',
     validationResult: 'validationResult',
     resetClasses: 'resetClasses',
+    validate: 'validate',
 };
 
 
@@ -61,20 +62,20 @@ export function reducer(state, action) {
                 ...state,
                 _classes: _classes,
             }
-        case types.validationResult:
-            const [valid, err] = action.payload;
-            const classToAdd = valid ?
-                'rd-valid' : 'rd-error';
-            const _toSet = {
-                ...state,
-                _classes: {
-                    ...state._classes,
-                    rdWrap: [..._classes.rdWrap, classToAdd]
-                },
-                valid,
-                err,
-            }
-            return _toSet;
+        // case types.validationResult:
+        //     const [valid, err] = action.payload;
+        //     const classToAdd = valid ?
+        //         'rd-valid' : 'rd-error';
+        //     const _toSet = {
+        //         ...state,
+        //         _classes: {
+        //             ...state._classes,
+        //             rdWrap: [..._classes.rdWrap, classToAdd]
+        //         },
+        //         valid,
+        //         err,
+        //     }
+        //     return _toSet;
         case types.showInput:
             // showInput -> true = open input
             // showInput -> false = close input
@@ -90,7 +91,7 @@ export function reducer(state, action) {
                 return {
                     ...state,
                     showInput,
-                } 
+                }
             }
             // otherwise open input
             return {
@@ -103,6 +104,30 @@ export function reducer(state, action) {
                 spinner: action.payload,
             }
 
+        case types.validate:
+            if (state.validator) {
+
+                const [valid, err] =
+                    state.validator(action.payload);
+
+                const classToAdd = valid ?
+                    'rd-valid' : 'rd-error';
+                const showInput = !valid;
+                const _toSet = {
+                    ...state,
+                    _classes: {
+                        ...state._classes,
+                        rdWrap: [..._classes.rdWrap, classToAdd]
+                    },
+                    valid,
+                    err,
+                    showInput,
+                }
+                return _toSet;
+            }
+            return {
+                ...state,
+            }
         default:
             throw Error(`Reducer error: shoudn't have happend`)
     }

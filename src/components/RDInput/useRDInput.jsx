@@ -10,8 +10,8 @@ export function useRDInput() {
     let timeout;
     useEffect(() => {
         timeout = setTimeout(() => {
-            if (_value) _validate();
-        }, 700);
+            _validate();
+        }, 2000);
 
         return () => {
             clearTimeout(timeout);
@@ -21,16 +21,19 @@ export function useRDInput() {
     let timeout2;
     useEffect(() => {
         timeout2 = setTimeout(() => {
-            dispatch({
-                type: types.showInput,
-                payload: false,
-            })
-        }, 5000)
+            const { valid } = _getState();
+            if (valid) {
+                dispatch({
+                    type: types.showInput,
+                    payload: false,
+                })
+            }
+        }, 2000)
 
         return () => {
             clearTimeout(timeout2)
         }
-    }, [_value, _state.showInput])
+    }, [_state.showInput, _value])
 
     function set(conf) {
 
@@ -50,6 +53,7 @@ export function useRDInput() {
             payload: { ...conf, valid, required, showInput }
         });
 
+        _validate();
     }
 
     function penclick(e) {
@@ -68,27 +72,20 @@ export function useRDInput() {
     }
 
     function _validate() {
-        
-        const { validator } = _state;
-        if (validator) {
-            
-            _spinner(true);
-            
-            dispatch({
-                type: types.validationResult,
-                payload: validator(_value),
-            })
-                    
-            _spinner(false);
-        }
+        _spinner(true);
+        dispatch({
+            type: types.validate,
+            payload: _value,
+        })
+        _spinner(false);
     }
 
     function _getState() {
         _validate();
 
-        return { 
+        return {
             value: _value,
-            valid: _state.valid, 
+            valid: _state.valid,
         }
     }
 

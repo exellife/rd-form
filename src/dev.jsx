@@ -24,7 +24,7 @@ import {
 
 function validateSomething(str) {
 
-    return [false, 'some message from backend']
+    return [true, 'some message from backend']
 
 }
 
@@ -60,7 +60,7 @@ function App() {
             hint: 'this field is good',
             clickable: true,
             btn: _btn,
-
+            value: '123123'
         });
 
         // PswdInput.set({
@@ -85,7 +85,8 @@ function App() {
             value: 'James Bond',
             clickable: true,
             btn: _btn,
-            question: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit.'
+            question: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit.',
+
         })
 
         // SomeInput.set({

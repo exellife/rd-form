@@ -328,7 +328,8 @@
     showInput: 'showInput',
     spinner: 'spinner',
     validationResult: 'validationResult',
-    resetClasses: 'resetClasses'
+    resetClasses: 'resetClasses',
+    validate: 'validate'
   };
   var state = {
     type: '',
@@ -357,28 +358,14 @@
           _classes: _classes
         });
 
-      case types.validationResult:
-        var [valid, err] = action.payload;
-        var classToAdd = valid ? 'rd-valid' : 'rd-error';
-
-        var _toSet = _objectSpread2(_objectSpread2({}, state), {}, {
-          _classes: _objectSpread2(_objectSpread2({}, state._classes), {}, {
-            rdWrap: [..._classes.rdWrap, classToAdd]
-          }),
-          valid,
-          err
-        });
-
-        return _toSet;
-
       case types.showInput:
         var close = !action.payload;
 
         if (close) {
           var {
-            valid: _valid
+            valid
           } = state;
-          var showInput = !_valid;
+          var showInput = !valid;
           return _objectSpread2(_objectSpread2({}, state), {}, {
             showInput
           });
@@ -393,6 +380,27 @@
           spinner: action.payload
         });
 
+      case types.validate:
+        if (state.validator) {
+          var [_valid, err] = state.validator(action.payload);
+          var classToAdd = _valid ? 'rd-valid' : 'rd-error';
+
+          var _showInput = !_valid;
+
+          var _toSet = _objectSpread2(_objectSpread2({}, state), {}, {
+            _classes: _objectSpread2(_objectSpread2({}, state._classes), {}, {
+              rdWrap: [..._classes.rdWrap, classToAdd]
+            }),
+            valid: _valid,
+            err,
+            showInput: _showInput
+          });
+
+          return _toSet;
+        }
+
+        return _objectSpread2({}, state);
+
       default:
         throw Error("Reducer error: shoudn't have happend");
     }
@@ -404,8 +412,8 @@
     var timeout;
     React.useEffect(() => {
       timeout = setTimeout(() => {
-        if (_value) _validate();
-      }, 700);
+        _validate();
+      }, 2000);
       return () => {
         clearTimeout(timeout);
       };
@@ -413,15 +421,21 @@
     var timeout2;
     React.useEffect(() => {
       timeout2 = setTimeout(() => {
-        dispatch({
-          type: types.showInput,
-          payload: false
-        });
-      }, 5000);
+        var {
+          valid
+        } = _getState();
+
+        if (valid) {
+          dispatch({
+            type: types.showInput,
+            payload: false
+          });
+        }
+      }, 2000);
       return () => {
         clearTimeout(timeout2);
       };
-    }, [_value, _state.showInput]);
+    }, [_state.showInput, _value]);
 
     function set(conf) {
       if (!conf.type || !conf.id || !conf.name || !conf.label) {
@@ -439,6 +453,8 @@
           showInput
         })
       });
+
+      _validate();
     }
 
     function penclick(e) {
@@ -457,20 +473,14 @@
     }
 
     function _validate() {
-      var {
-        validator
-      } = _state;
+      _spinner(true);
 
-      if (validator) {
-        _spinner(true);
+      dispatch({
+        type: types.validate,
+        payload: _value
+      });
 
-        dispatch({
-          type: types.validationResult,
-          payload: validator(_value)
-        });
-
-        _spinner(false);
-      }
+      _spinner(false);
     }
 
     function _getState() {
