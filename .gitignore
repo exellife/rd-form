@@ -1,0 +1,7 @@
+node_modules
+react-files
+src/**/_trash.js
+src/**/_trash.jsx
+dev
+package-lock.json
+
