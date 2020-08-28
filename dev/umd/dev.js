@@ -50,9 +50,7 @@
           name: 'password',
           label: 'password',
           value: '',
-          hint: 'Must be at least 10 characters long',
-          clickable: true,
-          btn: _btn
+          hint: 'Must be at least 10 characters long'
         });
         NameInput.set({
           type: 'text',

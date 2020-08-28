@@ -81,8 +81,8 @@ function App() {
             label: 'password',
             value: '',
             hint: 'Must be at least 10 characters long',
-            clickable: true,
-            btn: _btn,
+            // clickable: true,
+            // btn: _btn,
         });
 
         NameInput.set({
