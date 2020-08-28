@@ -67,9 +67,11 @@
       function submit(e) {
         e.preventDefault();
         var m = EmailInput.getState();
+        var p = PswdInput.getState();
         var n = NameInput.getState();
         console.log(m);
         console.log(n);
+        console.log(p);
       }
 
       var styles = {

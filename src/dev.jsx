@@ -116,12 +116,12 @@ function App() {
         // EmailInput.validate();
         // PswdInput.validate();
         const m = EmailInput.getState();
-        // const p = PswdInput.getState();
+        const p = PswdInput.getState();
         const n = NameInput.getState();
         // const t = SomeInput.getState();
         console.log(m);
-        // console.log(p);
         console.log(n)
+        console.log(p);
         // console.log(t);
     }
 
