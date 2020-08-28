@@ -80,7 +80,7 @@ function App() {
             name: 'password',
             label: 'password',
             value: '',
-            hint: 'Must be at least 6 characters long',
+            hint: 'Must be at least 10 characters long',
             clickable: true,
             btn: _btn,
         });
