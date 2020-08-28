@@ -4,7 +4,6 @@ import { terser } from 'rollup-plugin-terser';
 const peerDepsExternal = require('rollup-plugin-peer-deps-external');
 
 
-
 const plugin = [
     peerDepsExternal(),
     nodeResolve({

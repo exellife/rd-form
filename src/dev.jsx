@@ -13,7 +13,7 @@ import {
 } from 'ReactDynamicForm';
 
 
-// function validateSomething(str) {
+// function validateEmail(str) {
 //     return new Promise((res, rej) => {
 //         setTimeout(() => {
 //             res([true, 'some message from backend'])
@@ -22,10 +22,20 @@ import {
 //     })
 // }
 
-function validateSomething(str) {
+function validateEmail(str) {
 
-    return [true, 'some message from backend']
+    if (!str.length) return [
+        false,
+        'This field is required to proceed'
+    ];
 
+
+    const re = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/g;
+
+    const valid = re.test(str);
+    let msg = '';
+    if (!valid) msg = 'Invalid email address';
+    return [valid, msg];
 }
 
 function validatePswd(str) {
@@ -40,7 +50,7 @@ function App() {
 
     const EmailInput = useRDInput()
     const _btn = (
-        <i>pen</i>
+        <i>edit</i>
     );
 
     const PswdInput = useRDInput();
@@ -51,31 +61,29 @@ function App() {
     useEffect(() => {
 
         EmailInput.set({
-            validator: validateSomething,
+            validator: validateEmail,
             type: 'email',
             id: 'email',
             name: 'email',
             label: 'email',
             value: '',
-            hint: 'this field is good',
+            hint: '',
             clickable: true,
             btn: _btn,
-            value: '123123'
+            value: 'invalid.email'
         });
 
-        // PswdInput.set({
-        //     validator: validatePswd,
-        //     props: {
-        //         type: 'password',
-        //         id: 'password',
-        //         name: 'password',
-        //         label: 'password',
-        //         value: '',
-        //         hint: 'Must be at least 6 characters long',
-        //         clickable: true,
-        //         btn: _btn,
-        //     }
-        // });
+        PswdInput.set({
+            validator: validatePswd,
+            type: 'password',
+            id: 'password',
+            name: 'password',
+            label: 'password',
+            value: '',
+            hint: 'Must be at least 6 characters long',
+            clickable: true,
+            btn: _btn,
+        });
 
         NameInput.set({
             type: 'text',
@@ -86,7 +94,6 @@ function App() {
             clickable: true,
             btn: _btn,
             question: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit.',
-
         })
 
         // SomeInput.set({
@@ -129,9 +136,9 @@ function App() {
             <RDForm styles={styles}>
                 <RDInput {...EmailInput.props} />
                 <RDInput {...NameInput.props} />
-                {/* <RDInput {...PswdInput.props} />
-                
-                <RDTextArea {...SomeInput.props} /> */}
+                <RDInput {...PswdInput.props} />
+
+                {/* <RDTextArea {...SomeInput.props} /> */}
                 <button onClick={e => submit(e)}>submit</button>
             </RDForm>
         </>
