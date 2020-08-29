@@ -90,7 +90,7 @@ function SomeComponent() {
 
     }, []);
 
-
+    // called on `submit` button click
     function submit(e) {
         e.preventDefault();
 
@@ -105,7 +105,9 @@ function SomeComponent() {
             /* do something with emailState.value */
         };
         
-
+        // log it to console
+        // see the demo...
+        // open browsers devtools' console to see the result
         console.log(emailState);
         console.log(nameState);
         console.log(pswdState);
