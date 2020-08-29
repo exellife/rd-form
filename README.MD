@@ -32,7 +32,8 @@ function SomeComponent() {
     const NameInput = useRDInput();
 
     // custom icon needs to be provided
-    // in case it's necessary to appear in the input
+    // in case it's necessary to appear 
+    // in the input's closed state
     // in this case it's just `edit` sign
     const _btn = (
         <i>edit</i>
@@ -130,13 +131,13 @@ function SomeComponent() {
 // in this case parameter `str`
 // and should always return [boolean, String]
 function validateSomething(str) {
-    // do you logic with str
+    // do your logic with str
     if ( matchesMyLogic(str) ) {
         // true means valid input
         // and you could show optional message to a user
         return [true, 'Optional message']
     }
-    // otherwice, if it didn't match you logic
+    // otherwice, if it didn't match your logic
     return [false, 'Your error message']
 }
 
